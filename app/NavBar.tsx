@@ -1,11 +1,16 @@
+'use client';
 import Link from 'next/link';
 import React from 'react';
 import { LiaBugSolid } from 'react-icons/lia';
+import classNames from 'classnames';
+import { usePathname } from 'next/navigation';
 
 const NavBar = () => {
+  const currentPath = usePathname();
+
   const links = [
     { label: 'Dashboard', href: '/' },
-    { label: 'issues', href: '/issues' },
+    { label: 'Issues', href: '/issues' },
   ];
 
   return (
@@ -19,7 +24,11 @@ const NavBar = () => {
           <Link
             key={link.label}
             href={link.href}
-            className="text-zinc-500 hover:text-zinc-800 transition-colors"
+            className={classNames({
+              'text-zinc-900': link.href === currentPath,
+              'text-zinc-500': link.href !== currentPath,
+              'hover:text-zinc-800 transition-colors': true,
+            })}
           >
             {link.label}
           </Link>
