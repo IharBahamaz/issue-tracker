@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import React from 'react';
 import { Skeleton } from '@/app/components';
+import toast, { Toaster } from 'react-hot-toast';
 
 const AssigneeSelect = ({ issue }: { issue: Issue }) => {
   const {
@@ -22,28 +23,34 @@ const AssigneeSelect = ({ issue }: { issue: Issue }) => {
   if (error) return null;
 
   return (
-    <Select.Root
-      defaultValue={issue.assignedToUserId || ''}
-      onValueChange={(userId) => {
-        axios.patch('/api/issues/' + issue.id, {
-          assignedToUserId: userId || null,
-        });
-      }}
-    >
-      <Select.Trigger placeholder='Assign...'>
-        <Select.Content>
-          <Select.Group>
-            <Select.Label>Suggestion</Select.Label>
-            <Select.Item value=''>Unassigned</Select.Item>
-            {users?.map((user) => (
-              <Select.Item key={user.id} value={user.id}>
-                {user.name}
-              </Select.Item>
-            ))}
-          </Select.Group>
-        </Select.Content>
-      </Select.Trigger>
-    </Select.Root>
+    <>
+      <Select.Root
+        defaultValue={issue.assignedToUserId || ''}
+        onValueChange={(userId) => {
+          axios
+            .patch('/api/issues/' + issue.id, {
+              assignedToUserId: userId || null,
+            })
+            .catch(() => {
+              toast.error('Changes could not be saved');
+            });
+        }}
+      >
+        <Select.Trigger placeholder='Assign...'>
+          <Select.Content>
+            <Select.Group>
+              <Select.Label>Suggestion</Select.Label>
+              <Select.Item value=''>Unassigned</Select.Item>
+              {users?.map((user) => (
+                <Select.Item key={user.id} value={user.id}>
+                  {user.name}
+                </Select.Item>
+              ))}
+            </Select.Group>
+          </Select.Content>
+        </Select.Trigger>
+      </Select.Root>
+    </>
   );
 };
 
