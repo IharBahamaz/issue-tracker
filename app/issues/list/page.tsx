@@ -51,5 +51,4 @@ export const metadata: Metadata = {
   title: 'Issue Tracker - Issue List',
   description: 'View all project issues',
 };
-
 export default IssuesPage;
